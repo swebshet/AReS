@@ -1,0 +1,38 @@
+# docker compose file for AReS to work out of the box
+version: '3.1'
+services:
+  elasticsearch:
+    restart: always
+    image: elasticsearch
+    ports:
+      - 9200:9200 
+      - 9300:9300
+    volumes:
+      - ./esData:/usr/share/elasticsearch/data
+      - ./esConfig:/usr/share/elasticsearch/config
+    environment:
+      - cluster.name=docker-cluster  
+      - bootstrap.memory_lock=true  
+  kibana:
+    restart: always
+    image: kibana
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch  
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+  frontend:
+    container_name: frontend
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch  
+    image: nginx
+    restart: always
+    ports:  
+       - "8080:80" 
+    volumes:
+       - ./frontend/dist/AReS:/usr/share/nginx/html  

@@ -1,0 +1,250 @@
+<div *ngIf="windowWidth > 970" class="row">
+  <div class="col-md-6" style="display: flex;">
+    <div class="count-cards-group">
+
+      <div class="count-card" [ngbPopover]="totalItemsPopoverContent" triggers="hover" container="body" popoverTitle=""
+           placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_total | async}}</span>
+          Total Items
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="openAccessItemsPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">
+            <span>{{cards_open_access | async}}</span>
+            <span class="count-card-number-small">{{cards_open_access_percentage | async}}</span>
+          </span>
+          Open Access
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="limitedAccessItemsPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">
+            <span>{{cards_limited_access | async}}</span>
+            <span class="count-card-number-small">{{cards_limited_access_percentage | async}}</span>
+          </span>
+          Limited Access
+        </div>
+      </div>
+
+      <div *ngIf="counts.cards_n_a_license !== 0" class="count-card" [ngbPopover]="NAAccessItemsPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">
+            <span>{{cards_n_a_license | async}}</span>
+            <span class="count-card-number-small">{{cards_n_a_license_percentage | async}}</span>
+          </span>
+          N/A
+        </div>
+      </div>
+
+      <div *ngIf="counts.cards_n_a_license === 0" class="count-card" [ngbPopover]="authorsPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_authors | async}}</span>
+          Authors
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6" style="display: flex;">
+    <div class="btn-group count-cards-group">
+
+      <div *ngIf="counts.cards_n_a_license !== 0" class="count-card" [ngbPopover]="authorsPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_authors | async}}</span>
+          Authors
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="altmetricMentionsPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_mentions | async}}</span>
+          Altmetric: Mentions
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="altmetricReadersPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_readers | async}}</span>
+          Altmetric: Readers
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="crpsPopoverContent" triggers="hover" container="body" popoverTitle=""
+           placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_crps | async}}</span>
+          CRPs
+        </div>
+      </div>
+
+      <div *ngIf="counts.cards_n_a_license === 0" class="count-card" [ngbPopover]="countriesPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_countries | async}}</span>
+          Countries
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="windowWidth <= 970" class="row">
+  <div class="col-md-6" style="display: flex;">
+    <div class="count-cards-group">
+
+      <div class="count-card" [ngbPopover]="totalItemsPopoverContent" triggers="hover" container="body" popoverTitle=""
+           placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_total | async}}</span>
+          Total Items
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="openAccessItemsPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">
+            <span>{{cards_open_access | async}}</span>
+            <span class="count-card-number-small">{{cards_open_access_percentage | async}}</span>
+          </span>
+          Open Access
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6" style="display: flex;">
+    <div class="count-cards-group">
+
+      <div class="count-card" [ngbPopover]="limitedAccessItemsPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">
+            <span>{{cards_limited_access | async}}</span>
+            <span class="count-card-number-small">{{cards_limited_access_percentage | async}}</span>
+          </span>
+          Limited Access
+        </div>
+      </div>
+
+      <div *ngIf="counts.cards_n_a_license !== 0" class="count-card" [ngbPopover]="NAAccessItemsPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">
+            <span>{{cards_n_a_license | async}}</span>
+            <span class="count-card-number-small">{{cards_n_a_license_percentage | async}}</span>
+          </span>
+          N/A
+        </div>
+      </div>
+
+      <div *ngIf="counts.cards_n_a_license === 0" class="count-card" [ngbPopover]="authorsPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_authors | async}}</span>
+          Authors
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-md-6" style="display: flex;">
+    <div class="btn-group count-cards-group">
+
+      <div class="count-card" [ngbPopover]="altmetricMentionsPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_mentions | async}}</span>
+          Altmetric: Mentions
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="altmetricReadersPopoverContent" triggers="hover" container="body"
+           popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_readers | async}}</span>
+          Altmetric: Readers
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-md-6" style="display: flex;">
+    <div class="btn-group count-cards-group">
+
+      <div *ngIf="counts.cards_n_a_license !== 0" class="count-card" [ngbPopover]="authorsPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_authors | async}}</span>
+          Authors
+        </div>
+      </div>
+
+      <div class="count-card" [ngbPopover]="crpsPopoverContent" triggers="hover" container="body" popoverTitle=""
+           placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_crps | async}}</span>
+          CRPs
+        </div>
+      </div>
+
+      <div *ngIf="counts.cards_n_a_license === 0" class="count-card" [ngbPopover]="countriesPopoverContent"
+           triggers="hover" container="body" popoverTitle="" placement="bottom">
+        <div class="count-card-child">
+          <span class="count-card-number">{{cards_countries | async}}</span>
+          Countries
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<div>
+  <ng-template #totalItemsPopoverContent>
+    Total number of Information Products found.
+  </ng-template>
+  <ng-template #openAccessItemsPopoverContent>
+    Total number of Information Products freely accessible and usable as by license applied.
+  </ng-template>
+  <ng-template #limitedAccessItemsPopoverContent>
+    Total number of Information Products only accessible as by publisher's specifications.
+  </ng-template>
+  <ng-template #NAAccessItemsPopoverContent>
+    Total number of Information Products unlicensed.
+  </ng-template>
+  <ng-template #authorsPopoverContent>
+    Total number of Authors involved with the Information Products found.
+  </ng-template>
+  <ng-template #altmetricMentionsPopoverContent>
+    Total number of <a href="https://www.altmetric.com/about-our-data/" target="_blank">Altmetric</a> tags for Mentions for all the Information Products
+    found.
+  </ng-template>
+  <ng-template #altmetricReadersPopoverContent>
+    Total number of <a href="https://www.altmetric.com/about-our-data/" target="_blank">Altmetric</a> tags for Readers for all the Information Products
+    found.
+  </ng-template>
+  <ng-template #crpsPopoverContent>
+    Total number of CRPs involved with the Information Products found.
+  </ng-template>
+  <ng-template #countriesPopoverContent>
+    Total number of Countries involved with the Information Products found.
+  </ng-template>
+</div>
