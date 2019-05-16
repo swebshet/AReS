@@ -1,0 +1,41 @@
+<ng-template #modal let-c="close" let-d="dismiss">
+  <div class="modal-header">Exports</div>
+  <div id="export_modal">
+    <div id="modalBody" class="modal-body scrollable">
+      <div *ngIf="!downloadComplete && !isExporting">
+        <p>
+          Would you like to continue?
+        </p>
+      </div>
+
+      <ul class="list-group">
+        <li *ngFor="let part of partitions" class="list-group-item exporting-list">
+          <div class="row">
+            <div *ngIf="!part.complete" class="col-md-12">
+              Preparing{{outputIsLarge ? (' part ' + part.part_number) : ''}}
+              <span class="preparing-loading">.</span>
+              <span class="preparing-loading">.</span>
+              <span class="preparing-loading">.</span>
+            </div>
+            <div *ngIf="part.complete" class="col-md-12">
+              <a *ngIf="part.link" class="btn btn-success btn-block" [href]="part.link" target="_blank"
+                 (click)="part.downloaded = true">
+                <i *ngIf="part.downloaded" class="fa fa-check-square-o"></i> Download{{outputIsLarge ? (' part ' + part.part_number) : ''}}
+              </a>
+              <button *ngIf="!part.link" class="btn btn-success btn-block"
+                 (click)="part.onComplete()" type="button">
+                <i *ngIf="part.downloaded" class="fa fa-check-square-o"></i> Download{{outputIsLarge ? (' part ' + part.part_number) : ''}}
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="modal-footer">
+      <button (click)="c(); onCancel()" class="btn btn-secondary">Cancel</button>
+
+      <button *ngIf="!downloadComplete && !isExporting" (click)="onContinue(c)" class="btn btn-primary">Continue</button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,15 @@
+<div [class]="'card'" #card>
+  <div class="card-header bg-white">
+    {{header}}
+    <i class="fa fa-info-circle" [ngbPopover]="popoverContent" popoverTitle="{{popoverTitle}}" triggers="hover"
+      container="body" [placement]="popoverPlacement"></i>
+    <i #arrow class="fa {{collapsed ? 'fa-arrow-up' : 'fa-arrow-down'}} collapsible_button green"
+      attr.data-scroll_target="{{scroll_id}}" (click)="onCollapseButtonClick(true)"></i>
+  </div>
+  <div *ngIf="!collapsed" [@slideUpDown] class="card-body collapsible_section">
+    <div *ngIf="preventScroll" class="prevent-scroll">
+      <span>Click to enable</span>
+    </div>
+    <ng-content #content></ng-content>
+  </div>
+</div>

@@ -1,0 +1,493 @@
+<app-exports-download-modal #exportsModal [totalOutputs]="totalPublicationCount | async"></app-exports-download-modal>
+
+<div *ngIf="((windowWidth | async) > 850)" class="nav-bar-parent">
+  <nav class="row fixed-top bg-cg-green shadow fixed-top-nav-bar">
+    <div class="search-form col-md-12 input-group">
+
+      <div class="input-group-append branding">
+        <img class="mr-3" src="https://cgspace.cgiar.org/themes/0_CGIAR//images/logo-white.png" alt="" width="48"
+          height="48">
+        <h6 class="mb-0 text-white lh-100">CGSpace
+          <br>
+          <small class="text-white">A Repository of Agricultural Research Outputs</small>
+        </h6>
+      </div>
+
+      <input tourAnchor="search" (keydown)="onKeydownSearch($event)" (keyup)="onKeyupSearch($event)" class="form-control"
+        type="text" [(ngModel)]="searchTerm" placeholder="Search for Title, Author, etc..." aria-label="Search">
+
+      <div tourAnchor="search_button" class="input-group-prepend">
+        <button (click)="onSearchButtonClick()" class="btn btn-search">Search</button>
+      </div>
+      <div class="input-group-append start-tour">
+        <button class="btn btn-outline-secondary" (click)="tourStart()">
+          Start introduction tour
+        </button>
+      </div>
+
+    </div>
+  </nav>
+</div>
+<div *ngIf="((windowWidth | async) < 850)" class="nav-bar-parent">
+  <nav class="row fixed-top bg-cg-green shadow fixed-top-nav-bar fixed-top-nav-bar-small search-form">
+    <div class="col-md-12">
+
+      <div class="branding">
+        <img class="mr-3" src="https://cgspace.cgiar.org/themes/0_CGIAR//images/logo-white.png" alt="" width="48"
+          height="48">
+        <h6 class="mb-0 text-white lh-100">CGSpace
+          <br>
+          <small class="text-white">A Repository of Agricultural Research Outputs</small>
+        </h6>
+      </div>
+
+      <div class="input-group-append start-tour">
+        <button class="btn btn-outline-secondary" (click)="tourStart()">
+          Start introduction tour
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-12 input-group">
+      <input tourAnchor="search" (keydown)="onKeydownSearch($event)" (keyup)="onKeyupSearch($event)" class="form-control"
+        type="text" [(ngModel)]="searchTerm" placeholder="Search for Title, Author, etc..." aria-label="Search">
+      <div class="input-group-prepend">
+        <button (click)="onSearchButtonClick()" class="btn btn-search">Search</button>
+      </div>
+    </div>
+
+  </nav>
+</div>
+
+<div class="container-fluid">
+
+  <!--Side Filters-->
+  <div class="row">
+    <nav [class]="(isFiltering | async) ? 'side-open d-none d-md-block bg-light sidebar' : 'side-close d-none d-md-block bg-light sidebar'">
+      <div class="btn-group-vertical tools">
+        <button (click)="onFilterButtonClick()" class="btn btn-outline-secondary filter" [disabled]="filtersLoading"
+          [style]="filtersLoading? 'cursor: not-allowed;': 'cursor: auto;'" tourAnchor="filters">
+          <i class="fa fa-filter"></i>
+        </button>
+
+        <button (click)="onExport($event)" id="exportExcel" class="btn btn-outline-secondary excel" [disabled]="filtersLoading"
+          tourAnchor="excel_export">
+          <i class="fa fa-file-excel-o"></i>
+        </button>
+
+        <button (click)="onExport($event)" id="exportWord" class="btn btn-outline-secondary word" [disabled]="filtersLoading"
+          tourAnchor="word_export">
+          <i class="fa fa-file-word-o"></i>
+        </button>
+
+        <button (click)="onExport($event)" id="exportPdf" class="btn btn-outline-secondary pdf" [disabled]="filtersLoading"
+          tourAnchor="pdf_export">
+          <i class="fa fa-file-pdf-o"></i>
+        </button>
+
+        <button onClick="window.location.reload()" class="btn btn-outline-secondary reset" [disabled]="filtersLoading"
+          tourAnchor="reset">
+          <i class="fa fa-refresh"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-sticky filters-sidebar-sticky" id="filters">
+        <app-side-filters [menuFilters]="initSideFilters | async" [filteredFilters]="sideFilters | async" (newFilters)="onNewFilters($event)"
+          [boolOperator]="filtersBoolOperator | async" (presetSelect)="onNewPresetSelect($event)">
+        </app-side-filters>
+
+        <div class="form-group">
+          <div class="col-md-12">
+            <button type="button" (click)="onBoolOperatorButtonClick()" class="btn btn-secondary btn-block" style="margin-top: 5px;">
+              Boolean Operator: {{filtersBoolOperator | async}}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  </div>
+
+  <main role="main" id="main_container" [class]="(isFiltering | async) ? 'col-md-9 ml-sm-auto col-lg-9 px-4' : 'col-md-12 ml-sm-auto col-lg-12 px-4'">
+
+    <!--Welcoming-->
+    <div *ngIf="show_welcome_message !== false" class="row row-group section">
+      <div class="col-md-12">
+        <div class="card-body" tourAnchor="welcome" style="background-color: white;margin-top: 5px;">
+          <h1>
+            <button type="button" class="close" (click)="show_welcome_message = false">×</button>
+          </h1>
+          <h5 style="text-align: center; color: #427631">Welcome to AReS - Agricultural Research
+            e-Seeker</h5>
+          <p style="text-align: center"> Choose your search options from the controlled lists on your
+            left <i class="fa fa-filter"></i>, adding a filter always provides greater specificity to your
+            query. You can select
+            multiple elements in each filter, all the other filters will be automatically updated to guarantee a
+            combined result (no empty queries).
+            AReS figures, graphics, tables and the Info Products List of Results update in real time, your results are
+            instantly displayed! Navigate the page and explore all of its features. You can expand and collapse the
+            filters tab and any other section as you like, by clicking on <i class="fa fa-filter"></i> and
+            <i class="fa fa-arrow-down green"></i> icons. All graphics are exportable by clicking on
+            <i class="fa fa-bars"></i> and the Info Products List of Results can be downloaded in .xls
+            <i class="fa fa-file-excel-o"></i>, .docx <i class="fa fa-file-word-o"></i>, and .pdf
+            <i class="fa fa-file-pdf-o"></i> formats. Want to clean up all filters and look up something else? Click
+            <i class="fa fa-refresh"></i> and start a new query right away!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-group" style="display: none">
+      <div class="col-md-12">
+        <app-card-container header="Query Description">
+          <div *ngIf="(queryDescription | async)?.search">
+            <b>Showing search results for:</b> {{(queryDescription | async)?.search}}
+          </div>
+          <div *ngIf="(queryDescription | async)?.sort">
+            <b>Sorted by:</b> {{(queryDescription | async)?.sort}}
+          </div>
+          <div *ngIf="(queryDescription | async)?.filters?.length > 0">
+            <b>Filtered by:</b>
+          <ul>
+            <li *ngFor="let f of ((queryDescription | async).filters)">
+              {{f.key}}: {{f.value}};
+            </li>
+          </ul>
+          </div>
+        </app-card-container>
+      </div>
+    </div>
+
+    <!--Aggregation Count Cards-->
+    <div class="row row-group" tourAnchor="count_cards">
+      <div id="aggregation-count" class="col-md-12">
+        <app-aggregation-count-cards [boolQuery]="globalBoolQuery | async" [windowWidth]="windowWidth | async">
+        </app-aggregation-count-cards>
+      </div>
+    </div>
+
+    <div class="row row-group section" id="pie_sunburst-chart">
+      <!--Publication Types Pie chart-->
+      <div id="pie-chart" class="col-md-6 row-group" tourAnchor="pie_chart">
+        <app-card-container header="Info Products by Type" scroll_id="pie_sunburst-chart" id="pieChart"
+          [popoverContent]="pieChartPopoverContent" popoverPlacement="right">
+          <app-publication-types-piechart #content [showLegend]="(!(isFiltering | async) && (windowWidth | async) > 1023)"
+            [chartData]="piechartData | async" (requestVariable)="onPieChartRequest($event)"></app-publication-types-piechart>
+        </app-card-container>
+      </div>
+
+      <!--Publication Mentions by year/CRP chart-->
+      <div class="col-md-6 row-group" tourAnchor="sunburst_chart">
+        <app-card-container header="Altmetric: Mentions by CRP" scroll_id="pie_sunburst-chart" id="sunChart"
+          [popoverContent]="mentionsChartPopoverContent" popoverPlacement="left">
+          <app-publication-sun #content (dataRequest)="onMentionsByCrpSunEvent()" [chartData]="sunChartData | async"></app-publication-sun>
+        </app-card-container>
+      </div>
+    </div>
+
+    <!--Publications Map-->
+    <div class="row row-group">
+      <div id="map-chart" class="col-md-12 section" tourAnchor="map_chart">
+        <app-card-container header="Info Products Overview" scroll_id="map-chart" id="geoMap" preventScroll="true"
+          [popoverContent]="mapChartPopoverContent" popoverPlacement="right">
+          <app-publications-map #content [countryData]="publicationCountries | async"></app-publications-map>
+        </app-card-container>
+      </div>
+    </div>
+
+    <!--Publications Bar Chart-->
+    <div class="row row-group">
+      <div id="bar-chart" class="col-md-12 section" tourAnchor="bar_chart">
+        <app-card-container header="Info Products Analytics" scroll_id="bar-chart" id="barChart"
+                            [popoverContent]="barChartPopoverContent" popoverPlacement="right">
+          <app-publications-bar-chart #content [chartData]="barChartData | async" (dataRequest)="onBarChartEvent($event)"></app-publications-bar-chart>
+        </app-card-container>
+      </div>
+    </div>
+
+    <div class="row row-group section" id="pie-chart_top-authors">
+      <!--Publication Journals by License Sunbursst-->
+      <div class="col-md-6 row-group" tourAnchor="journalsByLicense">
+        <app-card-container header="Journal Articles Disaggregator" id="journalsByLicense" popoverPlacement="right"
+                            [popoverContent]="journalsByLicensePopoverContent" scroll_id="pie-chart_top-authors">
+          <app-publication-sun #content (dataRequest)="onJournalByLicenseSunEvent()" [chartData]="journalsByLicenseChartData | async"></app-publication-sun>
+        </app-card-container>
+      </div>
+      <!--Top authors-->
+      <div class="col-md-6 row-group" tourAnchor="authorsList">
+        <app-card-container id="authorsList" header="Top Contributors" [popoverContent]="authorsListPopoverContent"
+          scroll_id="pie-chart_top-authors" popoverPlacement="left">
+          <app-bucket-display-list #content [buckets]="authorBuckets | async"></app-bucket-display-list>
+        </app-card-container>
+      </div>
+    </div>
+
+    <div class="row row-group section" id="bucket">
+      <!--CRP List-->
+      <div class="col-md-6 row-group" tourAnchor="crp_tag">
+        <app-card-container header="CRPs (Tag)" scroll_id="bucket" id="crpsList" preventScroll="true"
+                            [popoverContent]="crpTagsPopoverContent" popoverPlacement="right">
+          <app-bucket-display-list #content [buckets]="crpBuckets | async"></app-bucket-display-list>
+        </app-card-container>
+      </div>
+
+      <!--Funders List-->
+      <div class="col-md-6 row-group" tourAnchor="funder_tag">
+        <app-card-container header="Funders (Tag)" scroll_id="bucket" id="fundersList" preventScroll="true"
+          [popoverContent]="funderTagsPopoverContent" popoverPlacement="left">
+          <app-bucket-display-list #content [buckets]="funderBuckets | async"></app-bucket-display-list>
+        </app-card-container>
+      </div>
+    </div>
+
+    <!--Publications List-->
+    <div class="row row-group section" id="publications-list">
+      <div class="col-md-12" tourAnchor="publications_list">
+        <app-card-container header="Info Products List of Results" scroll_id="publications-list" id="publicationsList"
+          [popoverContent]="publicationsListPopoverContent" popoverPlacement="right">
+          <app-publications-list #content [query]="globalBoolQuery | async" [publicationsCount]="totalPublicationCount | async"
+            [externalSortBy]="sortByArray | async" (newSortBy)="onNewSortBy($event)"></app-publications-list>
+        </app-card-container>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="row">
+  <div [class]="(isFiltering | async) ? 'col-md-9 ml-sm-auto col-lg-9 px-4 filters-open' : 'col-md-12 ml-sm-auto col-lg-12 px-4'"
+    style="padding: 0 !important;">
+    <div *ngIf="((windowWidth | async) >= 1060)" class="row bottom-banner">
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="https://www.ilri.org/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/ilri-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+          <div class="count-card">
+            <a class="count-card-child" href="http://www.icarda.org/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/icarda-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+          <div class="count-card">
+            <a class="count-card-child" href="https://duraspace.org" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/dspace-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+          <div class="count-card">
+            <a class="count-card-child" href="http://codeobia.com/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/codeobia-logo.png'" height="32">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="((windowWidth | async) < 1060 && (windowWidth | async) >= 600)" class="row bottom-banner">
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="https://www.ilri.org/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/ilri-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+          <div class="count-card">
+            <a class="count-card-child" href="http://www.icarda.org/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/icarda-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="https://duraspace.org" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/dspace-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+          <div class="count-card">
+            <a class="count-card-child" href="http://codeobia.com/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/codeobia-logo.png'" height="32">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="((windowWidth | async) < 600)" class="row bottom-banner">
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="https://www.ilri.org/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/ilri-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="http://www.icarda.org/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/icarda-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="https://duraspace.org" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/dspace-logo.png'" height="60">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-12" style="display: flex; padding: 0 !important;">
+        <div class="count-cards-group">
+
+          <div class="count-card">
+            <a class="count-card-child" href="http://codeobia.com/" target="_blank">
+              <div class="image-container">
+                <img [src]="baseURL+'assets/codeobia-logo.png'" height="32">
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shortcut navigation">
+  <div class="btn-group-vertical">
+    <button (click)="scroll($event)" id="nav-pie_sunburst-chart" data-target="pie_sunburst-chart" class="btn btn-outline-secondary nav-buttons current">
+      <fa name="pie-chart"></fa>
+    </button>
+
+    <button (click)="scroll($event)" id="nav-map-chart" data-target="map-chart" class="btn btn-outline-secondary nav-buttons">
+      <fa name="map"></fa>
+    </button>
+
+    <button (click)="scroll($event)" id="nav-bar-chart" data-target="bar-chart" class="btn btn-outline-secondary nav-buttons">
+      <fa name="bar-chart"></fa>
+    </button>
+
+    <button (click)="scroll($event)" id="nav-pie-chart_top-authors" data-target="pie-chart_top-authors" class="btn btn-outline-secondary nav-buttons">
+      <i class="fa fa-star-o"></i>
+    </button>
+
+    <button (click)="scroll($event)" id="nav-bucket" data-target="bucket" class="btn btn-outline-secondary nav-buttons">
+      <fa name="list"></fa>
+    </button>
+
+    <button (click)="scroll($event)" id="nav-publications-list" data-target="publications-list" class="btn btn-outline-secondary nav-buttons">
+      <fa name="clipboard"></fa>
+    </button>
+
+  </div>
+</div>
+
+<div>
+  <ng-template #pieChartPopoverContent>
+    The totality of Information Products found is represented here, disaggregated by Type. You
+    can toggle individual types visualization on/off in the list at the right side of the graphic.<br>Click on
+    <i class="fa fa-bars"></i> to export this graphic, click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+  <ng-template #mentionsChartPopoverContent>
+    The totality of <a href="https://www.altmetric.com/about-our-data/" target="_blank">Altmetric</a> tags for Mentions
+    related to the Information Products found is represented here, disaggregated by Year and CRP.<br>Click on
+    <i class="fa fa-bars"></i> to export this graphic, click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+  <ng-template #journalsByLicensePopoverContent>
+    The totality of Journal Articles found is represented here, disaggregated by License and ISI Status.<br>Click on
+    <i class="fa fa-bars"></i> to export this graphic, click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+  <ng-template #authorsListPopoverContent>
+    List of the top ten authors by number of info products.
+  </ng-template>
+  <ng-template #mapChartPopoverContent>
+    The totality of geographical tags for all the Information Products found is represented here, disaggregated by
+    Country. The higher density, the more Information Products have been tagged to that specific Country. Overall, the
+    graphic shows the world areas targeted by research activities that have produced Information Products.<br>Click on
+    <i class="fa fa-bars"></i> to export this graphic, click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+  <ng-template #barChartPopoverContent>
+    The totality of Information Products found is represented here and can be further disaggregated by two variables at
+    the same time, choosing among "Type", "Year", "Author", "CRP" and "Funder". The "Year" selects pre-sets the most
+    recent dates, while all other filters pre-select the five options showing more results.<br>Click on
+    <i class="fa fa-bars"></i> to export this graphic, click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+  <ng-template #crpTagsPopoverContent>
+    The totality of CRPs tagged for all the Information Products found is represented here, listed by quantity of tags
+    for each CRP. Scroll down to see more results.<br>Click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+  <ng-template #funderTagsPopoverContent>
+    The totality of Funders tagged for all the Information Products found is represented here, listed by quantity of
+    tags for each Funder. Scroll down to see more results.<br>Click on <i class="fa fa-arrow-down green"></i> to
+    collapse it.
+  </ng-template>
+  <ng-template #publicationsListPopoverContent>
+    The totality of Information Products found is represented here. You can sort this list by "Date", "Type",
+    "Subject",
+    "Altmetric Mentions" and "Altmetric Readers" tags.<br> The full list can be downloaded in ".xls
+    <i class="fa fa-file-excel-o"></i>", ".docx <i class="fa fa-file-word-o"></i>", ".pdf
+    <i class="fa fa-file-pdf-o"></i>" formats, by clicking on the icons just below the <i class="fa fa-filter"></i>
+    icon on the upper-left side of the page.<br>Click on <i class="fa fa-arrow-down green"></i> to collapse it.
+  </ng-template>
+</div>
+
+<tour-step-template>
+  <ng-template let-step="step">
+    <p class="tour-step-content">
+      <ng-container *ngIf="step?.template" [ngTemplateOutlet]="step?.template" [ngTemplateOutletContext]="{ $implicit: step }"></ng-container>
+      <span *ngIf="step?.content">{{step?.content}}</span>
+    </p>
+    <div class="tour-step-navigation">
+      <button *ngIf="tour.hasPrev(step)" class="btn btn-sm btn-default" (click)="tour.prev()">« Prev</button>
+      <button *ngIf="tour.hasNext(step)" class="btn btn-sm btn-default" (click)="tour.next()">Next »</button>
+      <button class="btn btn-sm btn-default" (click)="tour.end()">End</button>
+    </div>
+  </ng-template>
+</tour-step-template>
