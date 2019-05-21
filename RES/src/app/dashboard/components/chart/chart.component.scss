@@ -1,0 +1,22 @@
+highcharts-chart {
+  width: 100%;
+  height: 400px;
+  display: block;
+}
+
+.chart-wrapper {
+  height: 420px;
+}
+
+/deep/ .mat-expansion-panel-content {
+  position: relative !important; // for the prevent scroll !
+}
+
+// see =>  https://github.com/highcharts/highcharts/issues/6427
+highcharts-chart::ng-deep {
+  .highcharts-container,
+  .highcharts-container svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

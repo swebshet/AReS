@@ -1,0 +1,12 @@
+.viewport {
+  height: 500px;
+  overflow-x: hidden !important; // firefox
+}
+
+.item {
+  height: 50px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

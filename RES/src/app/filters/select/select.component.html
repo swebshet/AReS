@@ -1,0 +1,20 @@
+<ng-select
+  [items]="filterOptions"
+  bindLabel="key"
+  (open)="getDataOnOpen()"
+  [loading]="loading"
+  (scrollToEnd)="onScrollToEnd()"
+  [virtualScroll]="true"
+  [typeahead]="searchTerms$"
+  [placeholder]="componentConfigs.placeholder"
+  [multiple]="true"
+  (change)="onChange($event)"
+  (remove)="onRemove($event)"
+  (blur)="onBlur($event)"
+  (add)="onAdd($event)"
+  [(ngModel)]="selectedOptions"
+  [dropdownPosition]="
+    componentConfigs.expandPosition ? componentConfigs.expandPosition : 'auto'
+  "
+>
+</ng-select>

@@ -1,0 +1,9 @@
+<div class="col-md-12 mt-1" *ngFor="let filter of filters">
+  <div [class]="filter.class">
+    <app-dynamic
+      *ngIf="filter.show"
+      [componentConfigs]="filter.componentConfigs"
+      [comp]="filter.component"
+    ></app-dynamic>
+  </div>
+</div>

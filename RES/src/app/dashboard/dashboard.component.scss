@@ -1,0 +1,12 @@
+// i must add these so the ngx-scroll-to
+// keep working see
+// https://github.com/nicky-lenaers/ngx-scroll-to/issues/66
+
+.mat-drawer-content,
+.mat-tab-body-content {
+  overflow: hidden !important;
+}
+
+.mat-tab-body.mat-tab-body-active {
+  overflow-y: hidden !important;
+}

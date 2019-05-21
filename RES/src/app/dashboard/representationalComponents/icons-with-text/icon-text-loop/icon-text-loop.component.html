@@ -1,0 +1,8 @@
+<ng-container *ngFor="let word of strWithIcons">
+  <ng-container *ngIf="word.split(':').length === 2; else elseTemplate">
+    <mat-icon [inline]="true"> {{ word.split(':')[1] }} </mat-icon>
+  </ng-container>
+  <ng-template #elseTemplate>
+    {{ word }}
+  </ng-template>
+</ng-container>

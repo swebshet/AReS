@@ -1,0 +1,41 @@
+.mat-toolbar-row {
+  // height: 80px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  // justify-content: space-between !important;
+  justify-content: flex-start !important;
+}
+
+.end {
+  margin-left: auto !important;
+}
+
+.nab-bar-images {
+  height: 60px !important;
+}
+
+button {
+  outline: none !important;
+}
+
+/deep/ .mat-drawer-inner-container {
+  overflow-x: hidden !important;
+}
+
+.toolbar-style {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  position: relative;
+  z-index: 0 !important;
+}
+
+#drawer {
+  max-width: 25% !important;
+  min-width: 25% !important;
+}
+
+@media only screen and (max-width: 600px) {
+  #drawer {
+    max-width: 50% !important;
+    min-width: 50% !important;
+  }
+}
