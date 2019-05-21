@@ -1,0 +1,27 @@
+<section class="row justify-content-end">
+  <div class="col-md-2 col-xs-12">
+    <ng-select
+      [items]="filterOptions"
+      bindLabel="display"
+      placeholder="Sort Options"
+      [(ngModel)]="selectedFilter"
+      (change)="onFilterChanged($event)"
+      [clearable]="false"
+      [dropdownPosition]="'bottom'"
+    >
+    </ng-select>
+  </div>
+  <div class="col-md-1 col-xs-12">
+    <ng-select
+      [items]="ascDesc"
+      placeholder="Order"
+      bindLabel="display"
+      bindValue="value"
+      (change)="reverse($event)"
+      [(ngModel)]="reverseOption"
+      [clearable]="false"
+      [dropdownPosition]="'bottom'"
+    >
+    </ng-select>
+  </div>
+</section>

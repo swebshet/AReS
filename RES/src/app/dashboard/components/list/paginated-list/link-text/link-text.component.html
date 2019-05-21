@@ -1,0 +1,28 @@
+<article class="w-100 break-word">
+  <a
+    target="_blank"
+    href="{{ source[content.identifierUri] }}"
+    class="primary-text"
+    rel="noopener"
+  >
+    <img [src]="'assets/' + source[content.icon] + 'Icon.jpg'" />
+    <strong>
+      {{ source[content.title] }}
+    </strong>
+  </a>
+  <p *ngIf="source[content.description]">
+    {{ source[content.description] }}
+  </p>
+  <section class="publication-text">
+    <ng-container *ngFor="let label of objectKeys(content.tags); let i = index">
+      <ng-container *ngIf="source[content.tags[label]]">
+        <app-tags
+          [ngClass]="{ 'simulate-p-tag': i === 0 || i === 1 }"
+          [key]="content.tags[label]"
+          [label]="label"
+          [labelData]="source[content.tags[label]]"
+        ></app-tags>
+      </ng-container>
+    </ng-container>
+  </section>
+</article>

@@ -1,0 +1,15 @@
+.break-word {
+  word-wrap: break-word !important;
+}
+
+.publication-text app-tags:not(:last-child):not(.simulate-p-tag)::after {
+  content: ' | ';
+}
+
+.simulate-p-tag {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}

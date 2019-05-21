@@ -1,0 +1,178 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'customTheme.scss';
+@import '~@ng-select/ng-select/themes/material.theme.css';
+@import '~bootstrap/scss/bootstrap-reboot';
+@import '~bootstrap/scss/bootstrap-grid';
+@import '~nouislider/distribute/nouislider.min.css';
+// @import '~highcharts/css/themes/dark-unica.scss';
+
+html,
+body {
+  font-family: 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#scrollNav {
+  min-width: 3vw;
+}
+
+mat-sidenav-container {
+  height: 91.8vh;
+}
+
+mat-spinner {
+  margin: 0 auto;
+}
+
+#main-content {
+  padding-top: 8px;
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c2c2c2;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: #adabab;
+}
+
+::-webkit-scrollbar-thumb:focus {
+  background: #636363;
+}
+
+.icon-with-text {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100% !important;
+}
+
+.prevent-scroll {
+  position: absolute;
+  background-color: #0000000d;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.prevent-scroll:hover {
+  transition: opacity 0.25s ease-in;
+  opacity: 1;
+}
+
+.prevent-scroll > span {
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  position: absolute;
+  top: 42%;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: black;
+}
+
+.center-text {
+  text-align: center !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  white-space: pre-wrap !important;
+  line-height: 1.5 !important;
+  min-height: 2em !important;
+  padding-bottom: 0.4em !important;
+  padding-top: 0.4em !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .w-xs-100 {
+    width: 100% !important;
+  }
+}
+//.mb-2{
+//  padding-right: 0 !important;
+//  padding-left: 0 !important;
+//  margin-top: 0 !important;
+//  margin-bottom: 0 !important;
+//}
+//.mat-expansion-panel {
+//  //border-bottom: solid #65b9b9 1px;
+//}
+.mat-expansion-panel {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  //margin-right: -20px !important;
+}
+.mat-expansion-panel-header {
+  border-radius: 0 !important;
+  border-width: 1px !important;
+}
+
+.arrow {
+  z-index: 10;
+  border-width: 12px;
+}
+
+.arrow, .arrow:after {
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.lists_counts {
+  text-align: center;
+  padding: 5px 0;
+  border-radius: .25em;
+  color: white;
+  width: 90px;
+}
+.no-side-padding{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.main-container{
+  margin-top: 78px;
+}
+
+.mat-toolbar {
+  position: fixed !important;
+  z-index: 999999 !important;;
+  padding-bottom: 5px !important;;
+}
+
+.mat-drawer-inner-container section.btn-group-vertical {
+  margin-top: -8px;
+  height: 92.5%;
+}
+app-paginated-list p, app-paginated-list app-tags {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  margin-top: 0;
+  -webkit-margin-before: 0 !important;
+  margin-block-start: 0 !important;
+  -webkit-margin-after: 0 !important;
+  margin-block-end: 0 !important;
+}
+.shorter .viewport {
+  height: 412px !important;
+}
