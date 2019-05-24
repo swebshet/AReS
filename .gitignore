@@ -1,1 +1,2 @@
-.angulardoc.json
+# Ignore macOS Finder settings
+.DS_Store
